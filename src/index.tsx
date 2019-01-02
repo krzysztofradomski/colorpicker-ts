@@ -1,11 +1,23 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import App from './App';
+import App from './components/App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
+const rootEl = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <App />,
-  document.getElementById('root') as HTMLElement
+  rootEl
 );
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+      const NextApp = require('./components/App').default;
+      ReactDOM.render(
+          <NextApp />,
+          rootEl
+      );
+  });
+}
+
 registerServiceWorker();

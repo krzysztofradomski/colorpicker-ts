@@ -3,9 +3,11 @@ import colorReducer from './colorReducer';
 
 import { applyMiddleware, combineReducers, createStore } from "redux";
 
-const rootReducer = combineReducers({
-  colorReducer,
-  // apiReducer
-})
+// const rootReducer = combineReducers({
+//   colorReducer,
+//   // apiReducer
+// });
+
+const rootReducer = colorReducer;
 
 export default rootReducer;

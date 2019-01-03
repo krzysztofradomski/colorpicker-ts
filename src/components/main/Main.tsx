@@ -24,10 +24,12 @@ interface IState {
 }
 
 interface IStoreState {
-  flags: { loaded: string },
-  colors: Array<{hex: string, name: string}>,
-  acceptedColor: string,
-  remoteErrors: Array<{}>,
+  color: { acceptedColor: string },
+  api: {
+    remoteErrors: Array<{}>,
+    flags: { loaded: string },
+    colors: Array<{hex: string, name: string}>,
+  }
 }
 
 class ColorPicker extends React.Component<IProps> {  
@@ -40,7 +42,7 @@ class ColorPicker extends React.Component<IProps> {
 
   public componentDidMount() {
     console.log('componentDidMount');
-    const ready = true;
+    const ready = !this.props.flags.loaded;
     if (ready) {
       this.setState({ ready });
       this.props.getRemoteColors();
@@ -88,7 +90,6 @@ class ColorPicker extends React.Component<IProps> {
       this.handleClick(matchingColors, regFull)
     }
 
-
     const pickedBackgroundColor = { background: backgroundColor };
     const connectionInfo = ready ? (
       <span style={{ color: 'green' }}>Colors downloaded &#10004;</span>
@@ -116,16 +117,13 @@ class ColorPicker extends React.Component<IProps> {
   }
 }
 
-const mapStateToProps = (state: IStoreState, ownProps: any): IState | any => {
-  console.log('maptstate', state)
-  const r = {
-    colors: state.colors,
-    flags: state.flags,
-    backgroundColor: state.acceptedColor,
-    error: state.remoteErrors ? state.remoteErrors[state.remoteErrors.length - 1] : null,
+const mapStateToProps = (state: IStoreState): IState => {
+  return {
+    colors: state.api.colors,
+    flags: state.api.flags,
+    backgroundColor: state.color.acceptedColor,
+    error: state.api.remoteErrors[state.api.remoteErrors.length - 1] || null,
   };
-  console.log('r', r);
-  return r;
 };
 
 export default connect(
